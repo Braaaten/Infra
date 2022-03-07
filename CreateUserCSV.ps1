@@ -140,13 +140,11 @@ foreach ($i in 0..99) {
   $SurName           = $LastName[$lnidx[$i]]
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
-  $Password          = -join ('abcdefghijklmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 3)
-  $Password          += -join ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 3)
+  $Password          = -join ('abcdefghijklmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 5)
+  $Password          += -join ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 5)
   $Password        += -join ('1234567890'.ToCharArray() | Get-Random -Count 3)
-      $Password      += -join ('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 2)
-        $Password          += -join ('éèêëçñðē'.ToCharArray() | Get-Random -Count 2)
-	  $Password          += -join ('ΓΔΛΞΣΦ'.ToCharArray() | Get-Random -Count 2)
-	    $Password          += -join ('ІКЛМНѮѺП'.ToCharArray() | Get-Random -Count 1)
+      $Password      += -join ('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 3)
+      
   
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
   $Path              = $OrgUnits[$ouidx[$i]] + ',' + "dc=SEC,dc=CORE"
