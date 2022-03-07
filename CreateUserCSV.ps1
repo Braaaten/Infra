@@ -30,6 +30,24 @@
 #
 if ((Get-ChildItem -ErrorAction SilentlyContinue seccoreusers.csv).Exists)
   {"You alread have the file seccoreusers.csv!"; return;}
+  
+  Function GenerateStrongPassword ([Parameter(Mandatory=$true)][int]$PasswordLenght)
+{
+Add-Type -AssemblyName System.Web
+$PassComplexCheck = $false
+do {
+$newPassword=[System.Web.Security.Membership]::GeneratePassword($PasswordLenght,1)
+If ( ($newPassword -cmatch "[A-Z\p{Lu}\s]") `
+-and ($newPassword -cmatch "[a-z\p{Ll}\s]") `
+-and ($newPassword -match "[\d]") `
+-and ($newPassword -match "[^\w]")
+)
+{
+$PassComplexCheck=$True
+}
+} While ($PassComplexCheck -eq $false)
+return $newPassword
+}
 
 # 100 unique firstnames without norwegian characters ('øæå')
 #
@@ -139,7 +157,7 @@ foreach ($i in 0..99) {
   $SurName           = $LastName[$lnidx[$i]]
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
-  $Password          = -join ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ0123456789!"#$%&()*+,-./:<=>?@[\]_{|}'.ToCharArray() | Get-Random -Count 16)
+  $Password          = GenerateStrongPassword
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
   $Path              = $OrgUnits[$ouidx[$i]] + ',' + "dc=SEC,dc=CORE"
   Write-Output "$UserName;$GivenName;$SurName;$UserPrincipalName;$DisplayName;$Password;$Department;$Path" >> seccoreusers.csv
