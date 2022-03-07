@@ -140,13 +140,14 @@ foreach ($i in 0..99) {
   $SurName           = $LastName[$lnidx[$i]]
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
-  $Password          = Get-RandomCharacters -length 5 -character 'abcdefghiljklmnopqrstuvwxyz'
-  $Password	    += Get-RandomCharacters -length 5 -characters 'ABCDEFGHKLMNOPRSTUVWXYZ'
-  $Password 	    += Get-RandomCharacters -length 1 -characters '1234567890'
-  $Password         += Get-RandomCharacters -length 1 -characters '~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'
-  $Password 	    += Get-RandomCharacters -length 1 -characters 'éèêëçñðē'
-  $Password 	    += Get-RandomCharacters -length 1 -characters 'ΓΔΛΞΣΦ'
-  $Password 	    += Get-RandomCharacters -length 1 -characters 'ІКЛМНѮѺП'
+  $Password          = -join ('abcdefghijklmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 3)
+  $Password          += -join ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 3)
+  $Password        += -join ('1234567890'.ToCharArray() | Get-Random -Count 3)
+      $Password      += -join ('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 2)
+        $Password          += -join ('éèêëçñðē'.ToCharArray() | Get-Random -Count 2)
+	  $Password          += -join ('ΓΔΛΞΣΦ'.ToCharArray() | Get-Random -Count 2)
+	    $Password          += -join ('ІКЛМНѮѺП'.ToCharArray() | Get-Random -Count 1)
+  
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
   $Path              = $OrgUnits[$ouidx[$i]] + ',' + "dc=SEC,dc=CORE"
   Write-Output "$UserName;$GivenName;$SurName;$UserPrincipalName;$DisplayName;$Password;$Department;$Path" >> seccoreusers.csv
