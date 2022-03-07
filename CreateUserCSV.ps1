@@ -29,25 +29,8 @@
 # Test so we don't overwrite a file by accident
 #
 if ((Get-ChildItem -ErrorAction SilentlyContinue seccoreusers.csv).Exists)
-  {"You alread have the file seccoreusers.csv!"; return;}
+  {"You already have the file seccoreusers.csv!"; return;}
   
-  Function GenerateStrongPassword ([Parameter(Mandatory=$true)][int]$PasswordLenght)
-{
-Add-Type -AssemblyName System.Web
-$PassComplexCheck = $false
-do {
-$newPassword=[System.Web.Security.Membership]::GeneratePassword($PasswordLenght,1)
-If ( ($newPassword -cmatch "[A-Z\p{Lu}\s]") `
--and ($newPassword -cmatch "[a-z\p{Ll}\s]") `
--and ($newPassword -match "[\d]") `
--and ($newPassword -match "[^\w]")
-)
-{
-$PassComplexCheck=$True
-}
-} While ($PassComplexCheck -eq $false)
-return $newPassword
-}
 
 # 100 unique firstnames without norwegian characters ('øæå')
 #
@@ -157,7 +140,13 @@ foreach ($i in 0..99) {
   $SurName           = $LastName[$lnidx[$i]]
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
-  $Password          = GenerateStrongPassword
+  $Password          = Get-RandomCharacters -length 5 -character 'abcdefghiljklmnopqrstuvwxyz'
+  $Password	    += Get-RandomCharacters -length 5 -characters 'ABCDEFGHKLMNOPRSTUVWXYZ'
+  $Password 	    += Get-RandomCharacters -length 1 -characters '1234567890'
+  $Password         += Get-RandomCharacters -length 1 -characters '~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'
+  $Password 	    += Get-RandomCharacters -length 1 -characters 'éèêëçñðē'
+  $Password 	    += Get-RandomCharacters -length 1 -characters 'ΓΔΛΞΣΦ'
+  $Password 	    += Get-RandomCharacters -length 1 -characters 'ІКЛМНѮѺП'
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
   $Path              = $OrgUnits[$ouidx[$i]] + ',' + "dc=SEC,dc=CORE"
   Write-Output "$UserName;$GivenName;$SurName;$UserPrincipalName;$DisplayName;$Password;$Department;$Path" >> seccoreusers.csv
