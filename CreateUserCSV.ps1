@@ -140,9 +140,9 @@ foreach ($i in 0..99) {
   $SurName           = $LastName[$lnidx[$i]]
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
-  $Password          = -join ('abcdefghijklmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 5) | ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 5) | 
-  			('1234567890'.ToCharArray() | Get-Random -Count 3) | ('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 3)
- 
+  $Files = Get-ChildItem -Path C:\Users\Administrator\Documents\characters.txt* -Recurse
+  $Password = $Files | Get-Random -Count 20
+
       
   
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
