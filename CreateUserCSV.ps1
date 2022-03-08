@@ -141,9 +141,9 @@ foreach ($i in 0..99) {
   $UserPrincipalName = $UserName + '@' + 'sec.core'
   $DisplayName       = $GivenName + ' ' + $SurName
   $Password          = -join ('abcdefghijklmnopqrstuvwxyz'.ToCharArray() | Get-Random -Count 5)
-  $Password          += -join ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 5)
-  $Password        += -join ('1234567890'.ToCharArray() | Get-Random -Count 3)
-      $Password      += -join ('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 3)
+  $Password          += ('ABCDEFGHKLMNOPRSTUVWXYZ'.ToCharArray() | Get-Random -Count 5)
+  $Password        += ('1234567890'.ToCharArray() | Get-Random -Count 3)
+      $Password      +=('~!@#$%^&*_-+=`|\(){}[]:;"<>,.?/'.ToCharArray() | Get-Random -Count 3)
       
   
   $Department        = ($OrgUnits[$ouidx[$i]] -split '[=,]')[1]
